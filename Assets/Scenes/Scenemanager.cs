@@ -17,13 +17,13 @@ public class NewMonoBehaviourScript : MonoBehaviour
 
 
 
-    puplic void GoToGameScene()
+    public void GoToGameScene()
     {
         SceneManager.LoadScene("Level1");
     }
 
 
-    puplic void Quit()
+    public void Quit()
     {
         Application.Quit();
     }
