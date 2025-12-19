@@ -1,37 +1,24 @@
 using UnityEngine;
-using UnityEngine.SceneManagement; // Für Szenenwechsel
-using UnityEngine.UI; // Für Button
+using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class NewMonoBehaviourScript : MonoBehaviour
 {
-    void Start()
-    {
-
-    }
-
-
-    void Update()
-    {
-
-    }
-
-
-
     public void GoToGameScene()
     {
         SceneManager.LoadScene("Level1");
     }
 
+    public void GoToSettingsScene()
+    {
+        SceneManager.LoadScene("Einstellungen");
+    }
 
     public void Quit()
     {
         Application.Quit();
     }
-
-
-
 }
-
 
 
 
