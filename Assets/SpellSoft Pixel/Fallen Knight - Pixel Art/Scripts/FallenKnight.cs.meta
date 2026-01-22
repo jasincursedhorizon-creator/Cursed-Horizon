@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: d3a94c8b070de9c44bbac5047ae6ec23
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 264600
+  packageName: Fallen Knight (2D Pixel Art)
+  packageVersion: 1.0.0
+  assetPath: Assets/SpellSoft Pixel/Fallen Knight - Pixel Art/Scripts/FallenKnight.cs
+  uploadId: 610965
