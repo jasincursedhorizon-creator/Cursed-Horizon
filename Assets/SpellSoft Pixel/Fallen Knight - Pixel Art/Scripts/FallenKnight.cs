@@ -34,7 +34,7 @@ public class FallenKnight : MonoBehaviour
     private bool isRunningRight;
 
     // Jumping variables
-    private float jumpForce = 15f;
+    private float jumpForce = 25f;
     [SerializeField] LayerMask groundLayer;
     [SerializeField] Transform groundCheckTransform;
     [SerializeField] float groundCheckRadius = 0.2f;
