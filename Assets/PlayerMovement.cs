@@ -1,57 +1,63 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
+[RequireComponent(typeof(Rigidbody2D))]
 public class PlayerMovement : MonoBehaviour
 {
-    private float speed = 8f;
-    private float jumpPower = 16f;
-    private float horizontal;
-    private bool isFacingRight = true;
+    [Header("Movement Settings")]
+    public float moveSpeed = 5f;           // Anpassbare Geschwindigkeit
+    public float jumpForce = 10f;          // Maximale Sprungkraft
+    public float jumpTime = 0.35f;         // Wie lange der Sprung gehalten werden kann
 
-    [SerializeField] private Rigidbody2D rb;
-    [SerializeField] private Transform groundCheck;
-    [SerializeField] private LayerMask groundLayer;
+    [Header("Ground Check")]
+    public Transform groundCheck;
+    public float groundCheckRadius = 0.2f;
+    public LayerMask groundLayer;
 
+    private Rigidbody2D rb;
+    private bool isGrounded;
+    private bool isJumping;
+    private float jumpTimeCounter;
 
-
-
-    //Update is called once per frame
-    void Update()
+    private void Start()
     {
-        horizontal = Input.GetAxis("Horizontal");
+        rb = GetComponent<Rigidbody2D>();
+    }
 
-        if (Input.GetButton("Jump") && IsGrounded())
+    private void Update()
+    {
+        // Horizontale Bewegung
+        float moveInput = Input.GetAxis("Horizontal");
+        rb.linearVelocity = new Vector2(moveInput * moveSpeed, rb.linearVelocity.y);
+
+        // Bodenkontrolle
+        isGrounded = Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, groundLayer);
+
+        // Sprung starten
+        if (isGrounded && Input.GetButtonDown("Jump"))
         {
-            rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpPower);
+            isJumping = true;
+            jumpTimeCounter = jumpTime;
+            rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
         }
 
-        if (Input.GetButtonUp("Jump") && rb.linearVelocity.y > 0f)
+        // Sprung halten f�r h�heren Sprung
+        if (Input.GetButton("Jump") && isJumping)
         {
-            rb.linearVelocity = new Vector2(rb.linearVelocity.x, rb.linearVelocity.y * 0.5f);
+            if (jumpTimeCounter > 0)
+            {
+                rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
+                jumpTimeCounter -= Time.deltaTime;
+            }
+            else
+            {
+                isJumping = false;
+            }
         }
 
-        Flip();
-    }
-
-    private void FixedUpdate()
-    {
-        rb.linearVelocity = new Vector2(horizontal * speed, rb.linearVelocity.y);
-    }
-    private bool IsGrounded()
-    {
-        return Physics2D.OverlapCircle(groundCheck.position, 0.2f, groundLayer);
-    }
-
-    private void Flip()
-    {
-        if( isFacingRight && horizontal < 0f || !isFacingRight && horizontal > 0f)
+        // Sprung beenden, wenn Taste losgelassen
+        if (Input.GetButtonUp("Jump"))
         {
-            isFacingRight = !isFacingRight;
-            Vector3 localScale = transform.localScale;
-            localScale.x *= -1f;
-            transform.localScale = localScale;
+            isJumping = false;
         }
     }
-
 }
