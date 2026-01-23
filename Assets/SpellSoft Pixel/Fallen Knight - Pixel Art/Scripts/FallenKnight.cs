@@ -1,10 +1,3 @@
-/*
- * Author: Dimitrios Gkaltsidis
- * Date: 30 Aug 2023
- * Disclaimer: This code is not fully optimized. For production-level 2D character functionality, consider crafting your own.
- * Version: 1.0.0
- */
-
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -84,9 +77,11 @@ public class FallenKnight : MonoBehaviour
     #region INPUTS
     private void GetMoveInput()
     {
-        if (canReceiveInput)
+        // ÄNDERUNG: Wir erlauben die Bewegungs-Eingabe immer, 
+        // ODER zumindest auch dann, wenn wir nicht am Boden sind.
+        if (canReceiveInput || !isGrounded)
         {
-            float moveForce = (Input.GetAxis("Horizontal"));
+            float moveForce = Input.GetAxisRaw("Horizontal"); // GetAxisRaw ist präziser für Platformer
 
             if (moveForce < 0)
             {
@@ -99,6 +94,7 @@ public class FallenKnight : MonoBehaviour
                 isRunningLeft = false;
             }
 
+            // Stoppen-Logik
             if (!Input.GetKey(KeyCode.A) && !Input.GetKey(KeyCode.D))
             {
                 StopMovement();
@@ -210,7 +206,10 @@ public class FallenKnight : MonoBehaviour
         if (isRunningLeft)
         {
             rb2D.linearVelocity = new Vector2(-moveSpeed, rb2D.linearVelocity.y);
-            if (canReceiveInput)
+
+            // Animation nur abspielen, wenn wir am Boden sind UND Input erlaubt ist
+            // Das verhindert, dass die Lauf-Animation die Sprung-Animation in der Luft überschreibt
+            if (canReceiveInput && isGrounded)
             {
                 animator.Play(runAnim);
             }
@@ -218,15 +217,18 @@ public class FallenKnight : MonoBehaviour
         else if (isRunningRight)
         {
             rb2D.linearVelocity = new Vector2(moveSpeed, rb2D.linearVelocity.y);
-            if (canReceiveInput)
+
+            if (canReceiveInput && isGrounded)
             {
                 animator.Play(runAnim);
             }
         }
-        else if (!isRunningLeft && !isRunningRight && canReceiveInput)
+        else
         {
-            if (canReceiveInput)
+            // Nur am Boden stoppen wir die X-Geschwindigkeit sofort auf 0
+            if (canReceiveInput && isGrounded)
             {
+                rb2D.linearVelocity = new Vector2(0, rb2D.linearVelocity.y);
                 animator.Play(idleAnim);
             }
         }
@@ -392,3 +394,4 @@ public class FallenKnight : MonoBehaviour
         }
     }
 }
+
