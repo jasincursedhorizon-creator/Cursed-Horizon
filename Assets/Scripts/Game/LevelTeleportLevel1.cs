@@ -3,7 +3,7 @@ using UnityEngine.SceneManagement;
 
 public class LevelTeleportLevel1 : MonoBehaviour
 {
-    [SerializeField] private string sceneName = "Level1";
+    [SerializeField] private string sceneName = "Level2";
 
     private void OnTriggerEnter2D(Collider2D other)
     {
